@@ -38,23 +38,23 @@ const UserDashboard = ({ user, error }) => {
     router.push(`/user-details-view/${userId}`);
   };
 
-  const handleDeleteUser = async(userId) => {
+  const handleDeleteUser = async (userId) => {
     //  delete user by id
     try {
-      const response = await fetch(`/api/delete-user/${userId}`,{
-        method: 'DELETE'
+      const response = await fetch(`/api/delete-user/${userId}`, {
+        method: "DELETE",
       });
-      if(!response.ok){
-        setDeleteErrorMessage('Failed to delete User!');
+      if (!response.ok) {
+        setDeleteErrorMessage("Failed to delete User!");
         return;
       }
-      setUsers(users=> users.filter(user=> user.id !== userId));
+      setUsers((users) => users.filter((user) => user.id !== userId));
       router.refresh();
       setDeleteMeSuccessssage(`User with Id: ${userId} deleted successfully!`);
       setDeleteErrorMessage(null);
     } catch (error) {
       setDeleteMeSuccessssage(null);
-      setDeleteErrorMessage('Failed to delete User!');
+      setDeleteErrorMessage("Failed to delete User!");
     }
   };
 
@@ -70,8 +70,14 @@ const UserDashboard = ({ user, error }) => {
     <div className="container mx-auto w-full">
       <HeaderComponent />
       <div className="flex justify-start mb-4 pr-4">
-        {deleteSuccessMessage ? (<p className="py-2 text-sm ml-2 text-green-600 font-semibold font-sans">{deleteSuccessMessage}</p>):(
-          <p className="py-2 text-sm ml-2 text-red-600 font-semibold font-sans">{deleteErrorMessage}</p>
+        {deleteSuccessMessage ? (
+          <p className="py-2 text-sm ml-2 text-green-600 font-semibold font-sans">
+            {deleteSuccessMessage}
+          </p>
+        ) : (
+          <p className="py-2 text-sm ml-2 text-red-600 font-semibold font-sans">
+            {deleteErrorMessage}
+          </p>
         )}
         <button
           onClick={handleAddUser}
@@ -108,48 +114,59 @@ const UserDashboard = ({ user, error }) => {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
-              {users.map((user) => (
-                <tr key={user.id}>
-                  <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                    {user.username}
-                  </td>
-                  <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                    {user.email}
-                  </td>
-                  <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                    {user.age || "N/A"}
-                  </td>
-                  <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                    {user.mobile}
-                  </td>
-                  <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                    {user.interest ? user.interest.join(", ") : "N/A"}
-                  </td>
-                  <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                    <button
-                      onClick={() => handleEditUser(user.id)}
-                      className="text-yellow-600/70 hover:text-yellow-700 tracking-wider mr-2 text-lg"
-                      title="Edit User"
-                    >
-                      <FaEdit />
-                    </button>
-                    <button
-                      onClick={() => handleViewDetails(user.id)}
-                      className="text-cyan-600/70 hover:text-cyan-700 tracking-wider mr-2 text-lg"
-                      title="View Details"
-                    >
-                      <FaEye />
-                    </button>
-                    <button
-                      onClick={() => handleDeleteUser(user.id)}
-                      className="text-red-600/70 hover:text-red-700 tracking-wider text-lg"
-                      title="Delete User"
-                    >
-                      <FaDumpster />
-                    </button>
+              {users.length === 0 ? (
+                <tr>
+                  <td
+                    colSpan="6"
+                    className="p-3 text-sm text-gray-700 whitespace-nowrap text-center"
+                  >
+                    No users, start by adding new users!
                   </td>
                 </tr>
-              ))}
+              ) : (
+                users.map((user) => (
+                  <tr key={user.id}>
+                    <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
+                      {user.username}
+                    </td>
+                    <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
+                      {user.email}
+                    </td>
+                    <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
+                      {user.age || "N/A"}
+                    </td>
+                    <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
+                      {user.mobile}
+                    </td>
+                    <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
+                      {user.interest ? user.interest.join(", ") : "N/A"}
+                    </td>
+                    <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
+                      <button
+                        onClick={() => handleEditUser(user.id)}
+                        className="text-yellow-600/70 hover:text-yellow-700 tracking-wider mr-2 text-lg"
+                        title="Edit User"
+                      >
+                        <FaEdit />
+                      </button>
+                      <button
+                        onClick={() => handleViewDetails(user.id)}
+                        className="text-cyan-600/70 hover:text-cyan-700 tracking-wider mr-2 text-lg"
+                        title="View Details"
+                      >
+                        <FaEye />
+                      </button>
+                      <button
+                        onClick={() => handleDeleteUser(user.id)}
+                        className="text-red-600/70 hover:text-red-700 tracking-wider text-lg"
+                        title="Delete User"
+                      >
+                        <FaDumpster />
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
